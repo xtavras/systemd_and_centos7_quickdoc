@@ -26,6 +26,7 @@ Bonus: tips and tricks.
 systemd 101
 ========================================================
 
+Basic service operations
 ```
 systemctl disable sshd
 systemctl enable sshd
@@ -34,12 +35,14 @@ systemctl stop sshd
 systemctl restart sshd
 systemctl reload sshd
 systemctl status sshd
-
-journalctl -e      # end
-journalctl -f      # follow
-journalctl -b      # this boot
-journalctl -u sshd # unit
 ```
+
+Basic log operations
+
+* See all logs & go to end: `journalctl -e`
+* Follow tail of all logs: `journalctl -f`
+* Logs limited to this boot: `journalctl -b`
+* Logs limited to specific service `journalctl -u sshd`
 
 
 Comparsion with init
@@ -52,15 +55,15 @@ Comparsion with init
 * systemd never loses initial log messages
 * systemd knows when a service crashes
 * systemd can respawn daemons as needed
-* systemd records runtime data
-    (captures stdout/stderr of processes)
+* systemd records runtime data (captures stdout/stderr of processes)
 * systemd doesn't lose daemon context during runtime
 * systemd can kill all components of a service cleanly
 * systemctl command replaces service and chkconfig
 
-Comparsion with init (cont.)
+Comparsion with init - runlevels
 ========================================================
 
+Runlevels are mapped to targets
 ```
 Runlevel    Target              Symlink to
 Runlevel 0  runlevel0.target -> poweroff.target
@@ -70,11 +73,16 @@ Runlevel 3  runlevel3.target -> multi-user.target
 Runlevel 4  runlevel4.target -> multi-user.target
 Runlevel 5  runlevel5.target -> graphical.target
 Runlevel 6  runlevel6.target -> reboot.target
+```
 
-systemctl get-default
-systemctl set-default multi-user.target
-    (/etc/systemd/system/default.target,
-        previously /etc/inittab)
+* Get current target: `systemctl get-default`
+* Set target to (e.g.) `multi-user`: `systemctl set-default multi-user.target`
+
+Setting target just changes symlink `/etc/systemd/system/default.target`
+(previously it was defined in /etc/inittab).
+
+You can also reboot and poweroff via `systemctl` (although you don't have to).
+```
 systemctl poweroff
 systemctl reboot
 ```
