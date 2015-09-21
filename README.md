@@ -1,6 +1,6 @@
 ---
 title: "systemd and CentOS7"
-author: "tender_programmer"
+author: "Martin Kopta"
 date: "September 20, 2015"
 output: html_document
 ---
